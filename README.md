@@ -1,7 +1,5 @@
 # hurriyet_emlak_scraper
 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
-
 Scrapes hurriyetemlak.com rental listings and stores in csv files
 
 Pulls and stores; ['Aciklama', 'Konum', 'Tarih', 'Oda', 'Brüt M²', 'Fiyat'] data from page listings.
