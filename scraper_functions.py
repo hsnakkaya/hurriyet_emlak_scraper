@@ -5,12 +5,12 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def emlak_spider(il_var, ilce_var=[]):
+def emlak_spider(il_var, ilce_var=[], add_headers=True):
 
     sleep_time = 0.5
     ilce_count = len(ilce_var)
 
-    with open('emlak_results.csv', mode='w', encoding='utf-8', newline='') as file:
+    with open('emlak_results.csv', mode='a', encoding='utf-8', newline='') as file:
         csv_writer = csv.writer(file)
 
         report = open('scraper_report.txt', 'a+')
@@ -19,7 +19,7 @@ def emlak_spider(il_var, ilce_var=[]):
 
         for y in range(len(il_var)):
 
-            report.write(str(datetime.datetime.now()) + '   -    scraping ' + il_var[y] + '\n')
+            report.write(str(datetime.datetime.now()) + '   -   scraping ' + il_var[y] + '\n')
             print(str(datetime.datetime.now()) + '   -   scraping ' + il_var[y])
 
             if ilce_count == 0:
@@ -45,8 +45,11 @@ def emlak_spider(il_var, ilce_var=[]):
                     i += 1
                 print(ilce_var)
 
-            row_to_write = ['aciklama', 'sehir', 'semt', 'mahalle', 'ilan tarihi', 'oda sayisi', 'alan', 'kira', 'url']
-            csv_writer.writerow(row_to_write)
+            if add_headers:
+                row_to_write = ['aciklama', 'sehir', 'semt', 'mahalle', 'ilan tarihi', 'oda sayisi', 'alan', 'kira', 'url']
+                csv_writer.writerow(row_to_write)
+            else:
+                row_to_write = [0] * 9
 
             for x in range(len(ilce_var)):
 
@@ -62,15 +65,23 @@ def emlak_spider(il_var, ilce_var=[]):
                 plain_text = source_code.text
                 soup = BeautifulSoup(plain_text, "html.parser")
 
-                count = soup.find('div', class_='fl count-title').find('strong')
-                # print(count.text)
+                try:
+                    count = soup.find('div', class_='fl count-title')
+                    print('type: ', type(count))
+                    count = count.find('strong')
 
-                s = count.text
-                s = s.replace('.', '')
+                    # print(count.text)
 
-                pages = int(s) // 50
-                if int(s) % 50 > 0:
-                    pages += 1
+                    s = count.text
+                    s = s.replace('.', '')
+
+                    pages = int(s) // 50
+                    if int(s) % 50 > 0:
+                        pages += 1
+
+                except Exception as e:
+                    print(e)
+                    pages = 1
 
                 # print(pages)
 

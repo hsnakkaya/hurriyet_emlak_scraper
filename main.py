@@ -1,6 +1,6 @@
 from scraper_functions import *
 
-ilce = ['atasehir']
+ilce = ['aladag', 'ceyhan', 'feke', 'imamoglu', 'karaisali', 'karatas', 'kozan', 'pozanti', 'saimbeyli', 'saricam', 'tufanbeyli', 'yumurtalik', 'yuregir']
 il = ['istanbul']
 
 all_ilce = ['adalar',
@@ -126,4 +126,4 @@ all_il = [
         'zonguldak',
         'kktc']
 
-emlak_spider(all_il)
+emlak_spider(all_il, True)
