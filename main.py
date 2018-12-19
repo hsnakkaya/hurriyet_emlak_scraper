@@ -126,4 +126,4 @@ all_il = [
         'zonguldak',
         'kktc']
 
-emlak_spider(all_il, True)
+emlak_spider(all_il, add_headers=True)

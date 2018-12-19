@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 def emlak_spider(il_var, ilce_var=[], add_headers=True):
 
-    sleep_time = 0.5
+    sleep_time = 2
     ilce_count = len(ilce_var)
 
     with open('emlak_results.csv', mode='a', encoding='utf-8', newline='') as file:
@@ -185,7 +185,7 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
                 print(str(datetime.datetime.now()) + '   -   ' + il_var[y] + '/' + ilce_var[x] + ': ' + str(pages) +
                       ' pages ' + str(entry_count) + ' entries')
 
-    report.write(str(datetime.datetime.now()) + '   -   ' + 'scraping done')
+    report.write(str(datetime.datetime.now()) + '   -   ' + 'scraping done\n')
     print(str(datetime.datetime.now()) + '   -   ' + 'scraping done')
     file.close()
     report.close()
