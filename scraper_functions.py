@@ -13,13 +13,10 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
     with open('emlak_results.csv', mode='a', encoding='utf-8', newline='') as file:
         csv_writer = csv.writer(file)
 
-        report = open('scraper_report.txt', 'a+')
-        report.write(str(datetime.datetime.now()) + '   -   scraper started\n')
         print(str(datetime.datetime.now()) + '   -   scraper started')
 
         for y in range(len(il_var)):
 
-            report.write(str(datetime.datetime.now()) + '   -   scraping ' + il_var[y] + '\n')
             print(str(datetime.datetime.now()) + '   -   scraping ' + il_var[y])
 
             if ilce_count == 0:
@@ -46,10 +43,11 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
                 print(ilce_var)
 
             if add_headers:
-                row_to_write = ['aciklama', 'sehir', 'semt', 'mahalle', 'ilan tarihi', 'oda sayisi', 'alan', 'kira', 'url']
+                row_to_write = ['id', 'aciklama', 'sehir', 'semt', 'mahalle',
+                                'ilan tarihi', 'oda sayisi', 'alan', 'kira', 'url']
                 csv_writer.writerow(row_to_write)
             else:
-                row_to_write = [0] * 9
+                row_to_write = [0] * 10
 
             for x in range(len(ilce_var)):
 
@@ -67,7 +65,7 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
 
                 try:
                     count = soup.find('div', class_='fl count-title')
-                    print('type: ', type(count))
+                    # print('type: ', type(count))
                     count = count.find('strong')
 
                     # print(count.text)
@@ -93,14 +91,16 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
                     title = a.find('h2', class_='title')
                     # print('aciklama: ', title.text.strip())
 
+                    listing_id = url.get('data-listing-id')
+                    # print(listing_id)
+
                     location = a.find('li', class_='location')
                     c = 0
                     for b in location.findAll('span'):
                         tag = ['sehir: ', 'semt: ', 'mahalle: ']
                         # print(tag[c], b.string)
-                        row_to_write[c + 1] = b.string
+                        row_to_write[c + 2] = b.string
                         c += 1
-
 
                     date = a.find('li', class_='date').find('span')
                     # print('ilan tarihi: ', date.string)
@@ -116,13 +116,14 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
 
                     # print('-------')
 
-                    row_to_write[0] = title.text.strip()
+                    row_to_write[0] = listing_id.strip()
+                    row_to_write[1] = title.text.strip()
 
-                    row_to_write[4] = date.string
-                    row_to_write[5] = room.string
-                    row_to_write[6] = square.text
-                    row_to_write[7] = price.string
-                    row_to_write[8] = entry_url
+                    row_to_write[5] = date.string
+                    row_to_write[6] = room.string
+                    row_to_write[7] = square.text
+                    row_to_write[8] = price.string
+                    row_to_write[9] = entry_url
                     csv_writer.writerow(row_to_write)
 
                     entry_count += 1
@@ -147,12 +148,15 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
                         title = a.find('h2', class_='title')
                         # print('aciklama: ', title.text.strip())
 
+                        listing_id = url.get('data-listing-id')
+                        # print(listing_id)
+
                         location = a.find('li', class_='location')
                         c = 0
                         for b in location.findAll('span'):
                             tag = ['sehir: ', 'semt: ', 'mahalle: ']
                             # print(tag[c], b.string)
-                            row_to_write[c + 1] = b.string
+                            row_to_write[c + 2] = b.string
                             c += 1
 
                         date = a.find('li', class_='date').find('span')
@@ -169,26 +173,23 @@ def emlak_spider(il_var, ilce_var=[], add_headers=True):
 
                         # print('-------')
 
-                        row_to_write[0] = title.text.strip()
+                        row_to_write[0] = listing_id.strip()
+                        row_to_write[1] = title.text.strip()
 
-                        row_to_write[4] = date.string
-                        row_to_write[5] = room.string
-                        row_to_write[6] = square.text
-                        row_to_write[7] = price.string
-                        row_to_write[8] = entry_url
+                        row_to_write[5] = date.string
+                        row_to_write[6] = room.string
+                        row_to_write[7] = square.text
+                        row_to_write[8] = price.string
+                        row_to_write[9] = entry_url
                         csv_writer.writerow(row_to_write)
 
                         entry_count += 1
 
-                report.write(str(datetime.datetime.now()) + '   -   ' + ilce_var[x] + ': ' + str(pages) +
-                             ' pages ' + str(entry_count) + ' entries' + '\n')
                 print(str(datetime.datetime.now()) + '   -   ' + il_var[y] + '/' + ilce_var[x] + ': ' + str(pages) +
                       ' pages ' + str(entry_count) + ' entries')
 
-    report.write(str(datetime.datetime.now()) + '   -   ' + 'scraping done\n')
     print(str(datetime.datetime.now()) + '   -   ' + 'scraping done')
     file.close()
-    report.close()
 
 
 
